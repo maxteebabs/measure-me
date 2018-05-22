@@ -1,0 +1,3 @@
+rootProject.name = 'measureIT'
+
+include ':app'
