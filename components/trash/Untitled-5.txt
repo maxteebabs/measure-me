@@ -1,0 +1,128 @@
+import React from 'react';
+import {ScrollView, Text, View, AsyncStorage, StatusBar, StyleSheet,  Image} from  'react-native';
+import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import { DrawerNavigator, StackNavigator } from 'react-navigation';
+import{Container, Header, Body, Title, Content, Left, Icon, Right, Button
+    , Footer, FooterTab, Drawer, Card, CardItem, List, ListItem} from 'native-base';
+import { Grid, Row, Col } from 'react-native-easy-grid';
+
+// import Header from 'react-navigation/src/views/Header/Header';
+import SideBar from './partials/sidebar';
+
+export default class Dashboard extends React.Component {
+    constructor(props){
+        super(props);
+        //setting the status bar style
+        StatusBar.setBarStyle('light-content');
+    }
+    static navigationOptions = {
+        title: 'Dashboard',
+        header: null,
+        tabBarLabel: 'Dashboard',
+        // drawerLabel: 'Menu',
+        drawerIcon: ({ tintColor }) => {
+            return (<MatIcon name="view-dashboard" size={28}  style={{color:tintColor}}></MatIcon>);      
+        }
+    }
+    closeDrawer = () => {
+        this.drawer._root.close()
+      };
+      openDrawer = () => {
+        this.drawer._root.open()
+      };
+    
+    render() {
+        
+        return (
+            <Drawer
+        ref={(ref) => { this.drawer = ref; }}
+        content={<SideBar navigator={this.navigator} nav={this.props.navigation} />}
+        onClose={() => this.closeDrawer()} >
+
+
+    <Container>
+            <Header>
+                <Left>
+                <Button transparent onPress={() => {this.openDrawer()}}>
+                    <Icon name='menu' />
+                </Button>
+                </Left>
+                <Body>
+                <Title>Dashboard</Title>
+                </Body>
+                <Right />
+            </Header>
+            <Content padder>
+                <Grid>
+                    <Row style={{ marginBottom: 5 }}>
+                        <Col style={{ backgroundColor: '#8e44ad', marginRight:5, height: 100, justifyContent: 'center' }}>
+                            <MatIcon name="book-open" style={styles.dashIcon} />
+                            <Text style={styles.dashText}>Attendance</Text>
+                        </Col>
+                        <Col style={{ backgroundColor: '#2ecc71', marginRight:5, height: 100, justifyContent: 'center' }}>
+                            <MatIcon name="calendar-clock" style={styles.dashIcon} />
+                            <Text style={styles.dashText}>Timetable</Text>
+                        </Col>
+                        <Col style={{ backgroundColor: '#2c3e50', height: 100, justifyContent: 'center' }}>
+                            <MatIcon name="account" style={styles.dashIcon} />
+                            <Text style={styles.dashText}>Profile</Text>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: 5 }}>
+                        <Col style={{ backgroundColor: '#c0392b', marginRight:5, height: 100, justifyContent: 'center' }}>
+                            <MatIcon name="image-album" style={styles.dashIcon} />
+                            <Text style={styles.dashText}>Gallery</Text>
+                        </Col>
+                        <Col style={{ backgroundColor: '#7f8c8d', marginRight:5, height: 100, justifyContent: 'center' }}>
+                            <MatIcon name="newspaper" style={styles.dashIcon} />
+                            <Text style={styles.dashText}>News</Text>
+                        </Col>
+                        <Col style={{ backgroundColor: '#3498db', height: 100, justifyContent: 'center' }}>
+                            <MatIcon name="library" style={styles.dashIcon} />
+                            <Text style={styles.dashText}>Result</Text>
+                        </Col>
+                    </Row>                   
+                </Grid>
+            </Content>
+            {/* <Footer>
+                <FooterTab>
+                <Button full>
+                    <Text>Footer</Text>
+                </Button>
+                </FooterTab>
+            </Footer> */}
+            </Container>
+      </Drawer>
+        );
+    }
+}
+
+const styles = StyleSheet.create({
+    navigationView: {
+        flex: 1,
+        backgroundColor: '#fff'
+    },
+    navigationViewText: {
+        margin:10,
+        fontSize: 16,
+        textAlign: 'left',
+    },
+    drawerViewText: {
+        margin:10,
+        fontSize: 16,
+        textAlign: 'right'
+    },
+    icon:{
+        fontSize:28
+    },
+    dashIcon: {
+        fontSize: 40,
+        color: '#fff',
+        textAlign: 'center'
+    },
+    dashText: {
+        textAlign: 'center',
+        color:'#fff'
+    }
+
+});

@@ -1,5 +1,5 @@
 {
-  "name": "measureIT",
+  "name": "MeasureIT",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,11 +7,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "native-base": "^2.4.2",
     "react": "16.3.1",
     "react-native": "0.55.4",
     "react-native-ui-kitten": "^3.0.0",
     "react-native-vector-icons": "^4.6.0",
-    "react-navigation": "^1.5.11"
+    "react-navigation": "^1.5.11",
+    "realm": "^2.6.0"
   },
   "devDependencies": {
     "babel-jest": "22.4.4",
