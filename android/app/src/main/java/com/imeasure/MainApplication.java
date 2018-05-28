@@ -1,4 +1,4 @@
-package com.measureit;
+package com.imeasure;
 
 import android.app.Application;
 

@@ -5,20 +5,34 @@ import { Container, Header, Content, Form, Item, Input, Picker
 import config from './../../app.json';
 const Realm = require('realm');
     
-export default class CreateMeasureMentScreen extends Component {
+export default class EditMeasureMentScreen extends Component {
     constructor(props) {
         super(props);
+        const {state} = this.props.navigation;
         this.state = {
             active: 'false',
-            fullname: '', number: '', gender: '',
-            shoulder: '', chest: '', arm_hole: '',
-            elbow: '', wrist: '', full_sleeve: '',
-            round_sleeve: '', bust: '', under_bust: '',
-            waist: '', hips: '', half_length: '', full_length: '',
+            id: state.params.item.id,
+            fullname: state.params.item.fullname, 
+            number: state.params.item.number, 
+            gender: state.params.item.gender,
+            shoulder: state.params.item.shoulder, 
+            chest: state.params.item.chest, 
+            arm_hole: state.params.item.arm_hole,
+            elbow: state.params.item.elbow, 
+            wrist: state.params.item.wrist, 
+            full_sleeve: state.params.item.full_sleeve,
+            round_sleeve: state.params.item.round_sleeve, 
+            bust: state.params.item.bust, 
+            under_bust: state.params.item.under_bust,
+            waist: state.params.item.waist, 
+            hips: state.params.item.hips, 
+            half_length: state.params.item.half_length, 
+            full_length: state.params.item.full_length,
             realm: {}
         };
         this.storeMeasurement = this.storeMeasurement.bind(this);
     }
+
     static navigationOptions = {
         title: '',
         header: null,
@@ -66,16 +80,9 @@ export default class CreateMeasureMentScreen extends Component {
         }).then(realm => {
             // realm.deleteRealmFile(this);
         realm.write(() => {
-            var max_id = realm.objects('Measurement').length;
-            if(!max_id) {
-                max_id = 1;
-            }else{
-                console.log('the id is '+max_id);
-                max_id = parseInt(max_id) + 1;
-            }
             realm.create('Measurement',  {
-                id: max_id,
-                created_at: new Date(),
+                id: this.state.id,
+                modified_at: new Date(),
                 fullname: this.state.fullname, 
                 number: this.state.number, 
                 gender: this.state.gender,
@@ -92,7 +99,7 @@ export default class CreateMeasureMentScreen extends Component {
                 hips: this.state.hips, 
                 half_length: this.state.half_length, 
                 full_length: this.state.full_length
-            });
+            }, true);
         });
         this.setState({ realm });
         // realm.close();        
@@ -124,11 +131,13 @@ export default class CreateMeasureMentScreen extends Component {
               <Form>
                 <Item floatingLabel>
                     <Label>Fullname</Label>
-                    <Input onChangeText={(fullname) => this.setState({fullname})} />
+                    <Input onChangeText={(fullname) => this.setState({fullname})}
+                        value={this.state.fullname} />
                 </Item>
                 <Item floatingLabel>
                     <Label>Phone Number </Label>
-                    <Input onChangeText={(number) => this.setState({number})} />
+                    <Input onChangeText={(number) => this.setState({number})}
+                        value={this.state.number} />
                 </Item>
                 
                 <Picker
@@ -145,64 +154,69 @@ export default class CreateMeasureMentScreen extends Component {
                 </Picker>
                 <Item floatingLabel>
                     <Label>Chest </Label>
-                    <Input onChangeText={(chest) => this.setState({chest})} />
+                    <Input onChangeText={(chest) => this.setState({chest})}
+                    value={this.state.chest} />
                 </Item>
                 <Item floatingLabel>
                     <Label>Shoulder </Label>
-                    <Input onChangeText={(shoulder) => this.setState({shoulder})} />
+                    <Input onChangeText={(shoulder) => this.setState({shoulder})}
+                     value={this.state.shoulder} />
                 </Item>
                
                 <Item floatingLabel>
                     <Label>Round Arm Hole </Label>
-                    <Input onChangeText={(arm_hole) => this.setState({arm_hole})} />
+                    <Input onChangeText={(arm_hole) => this.setState({arm_hole})} 
+                    value={this.state.arm_hole}/>
                 </Item>
                 <Item floatingLabel>
                     <Label>Round Elbow </Label>
-                    <Input onChangeText={(elbow) => this.setState({elbow})} />
+                    <Input onChangeText={(elbow) => this.setState({elbow})}
+                        value={this.state.elbow} />
                 </Item>
                 <Item floatingLabel>
                     <Label>Round Wrist </Label>
-                    <Input onChangeText={(wrist) => this.setState({wrist})} />
+                    <Input onChangeText={(wrist) => this.setState({wrist})} 
+                        value={this.state.wrist}/>
                 </Item>
                 <Item floatingLabel>
                     <Label>Full Sleeve(Shoulder to Wrist) </Label>
-                    <Input onChangeText={(full_sleeve) => this.setState({full_sleeve})} />
+                    <Input onChangeText={(full_sleeve) => this.setState({full_sleeve})} 
+                        value={this.state.full_sleeve}/>
                 </Item>
                 <Item floatingLabel>
                     <Label>Round Sleeve </Label>
-                    <Input onChangeText={(round_sleeve) => this.setState({round_sleeve})} />
+                    <Input onChangeText={(round_sleeve) => this.setState({round_sleeve})} 
+                        value={this.state.round_sleeve}/>
                 </Item>
-                {/* <Item floatingLabel>
-                    <Label>Round Neck </Label>
-                    <Input   onChangeText={(round_sleeve) => this.setState({round_sleeve})} />
-                </Item> */}
-                {/* <Item floatingLabel>
-                    <Label>Shoulder </Label>
-                    <Input  />
-                </Item> */}
                 <Item floatingLabel>
                     <Label>Bust </Label>
-                    <Input  onChangeText={(bust) => this.setState({bust})} />
+                    <Input  onChangeText={(bust) => this.setState({bust})} 
+                        value={this.state.bust}/>
                 </Item>
                 <Item floatingLabel>
                     <Label>Under Bust </Label>
-                    <Input  onChangeText={(under_bust) => this.setState({under_bust})} />
+                    <Input  onChangeText={(under_bust) => this.setState({under_bust})} 
+                        value={this.state.under_bust}/>
                 </Item>
                 <Item floatingLabel>
                     <Label>Waist </Label>
-                    <Input  onChangeText={(waist) => this.setState({waist})} />
+                    <Input  onChangeText={(waist) => this.setState({waist})} 
+                        value={this.state.waist}/>
                 </Item>
                 <Item floatingLabel>
                     <Label>Hips </Label>
-                    <Input  onChangeText={(hips) => this.setState({hips})} />
+                    <Input  onChangeText={(hips) => this.setState({hips})} 
+                        value={this.state.hips} />
                 </Item>
                 <Item floatingLabel last>
                     <Label>Half Length </Label>
-                    <Input  onChangeText={(half_length) => this.setState({half_length})} />
+                    <Input  onChangeText={(half_length) => this.setState({half_length})} 
+                        value={this.state.half_length}/>
                 </Item>
                 <Item floatingLabel last>
                     <Label>Full Length </Label>
-                    <Input  onChangeText={(full_length) => this.setState({full_length})} />
+                    <Input  onChangeText={(full_length) => this.setState({full_length})} 
+                        value={this.state.full_length}/>
                 </Item>
                 <TouchableOpacity onPress= {this.storeMeasurement}>
                     <View style={styles.submitButton}>

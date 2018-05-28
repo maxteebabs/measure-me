@@ -3,6 +3,7 @@ import { StackNavigator } from 'react-navigation';
 import  SplashScreen  from './components/splash';
 import  ListMeasurementScreen  from './components/measurement/list';
 import  CreateMeasurementScreen  from './components/measurement/create';
+import  EditMeasurementScreen  from './components/measurement/edit';
 
 
 const RootStack  =  StackNavigator({
@@ -14,6 +15,9 @@ const RootStack  =  StackNavigator({
     },
     createMeasurement: {
         screen: CreateMeasurementScreen,
+    },
+    editMeasurement: {
+        screen: EditMeasurementScreen,
     }
   }, {
       initialRouteName: 'Splash',
