@@ -97,11 +97,7 @@ export default class ListMeasurementScreen extends Component {
           {text: 'Yes', onPress: () => this.deleteMeasurement(item)}
         ], {cancelable: false});
     }
-    filteredPersons = async () => {
-      var persons = await this.state.persons.filter(this.filteredPerson);
-      console.log('persons',this.state.persons);
-      return persons;
-    }
+
     _renderItem = ({item}) => (
       <MyListItem
         id={item.id}
@@ -119,11 +115,10 @@ export default class ListMeasurementScreen extends Component {
 
     render() {
         let lowercasesearch = this.state.search.toLowerCase();
-      let persons = this.state.persons.filter(function(person) {
+        let persons = this.state.persons.filter(function(person) {
         let lowercasefullname = person.fullname.toLowerCase();
         return lowercasefullname.indexOf(lowercasesearch) > -1; 
       });
-      console.log(persons);
         return (
           <Container>
              <Header>
