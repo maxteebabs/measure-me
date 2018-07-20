@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text,View, ScrollView, StyleSheet, Alert, TouchableOpacity, Dimensions} from 'react-native';
+import {Text,View, ScrollView, StyleSheet, Alert, TouchableOpacity, Dimensions, YellowBox} from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Picker
     , Left, Right, Body, Label, Title, Button, Icon } from 'native-base';
 import config from './../../app.json';
@@ -17,6 +17,7 @@ export default class CreateMeasureMentScreen extends Component {
             waist: '', hips: '', half_length: '', full_length: '',
             realm: {}
         };
+        YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
         this.storeMeasurement = this.storeMeasurement.bind(this);
     }
     static navigationOptions = {
@@ -121,7 +122,7 @@ export default class CreateMeasureMentScreen extends Component {
                 </Body>
                 <Right />
             </Header>
-              <Form>
+              <Form style={styles.padder}>
                 <Item floatingLabel>
                     <Label>Fullname</Label>
                     <Input onChangeText={(fullname) => this.setState({fullname})} />
@@ -204,7 +205,7 @@ export default class CreateMeasureMentScreen extends Component {
                     <Label>Full Length </Label>
                     <Input  onChangeText={(full_length) => this.setState({full_length})} />
                 </Item>
-                <TouchableOpacity onPress= {this.storeMeasurement}>
+                <TouchableOpacity onPress= {this.storeMeasurement} >
                     <View style={styles.submitButton}>
                         <Text style={styles.submitButtonText}>Save Changes</Text>
                     </View>
@@ -220,10 +221,15 @@ const styles = StyleSheet.create({
     submitButton: {
         marginTop: 30,
         alignItems: 'center',
-        backgroundColor: '#3B5998'
+        backgroundColor: '#3B5998',
+        marginBottom: 20
     },
     submitButtonText: {
         padding: 20,
         color: '#fff'
+    },
+    padder: {
+        paddingLeft: 8,
+        paddingRight: 8
     }
 });

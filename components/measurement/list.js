@@ -22,49 +22,51 @@ export default class ListMeasurementScreen extends Component {
         tabBarLabel: ''
     }
 
-    componentWillMount() {
-      var PersonSchema =  {
-        name: 'Measurement',
-        primaryKey: 'id',
-        properties: {
-            id: 'int',
-            fullname: 'string', 
-            number: 'string', 
-            gender: 'string',
-            shoulder: 'string?', 
-            chest: 'string?', 
-            arm_hole:'string?',
-            elbow: 'string?', 
-            wrist: 'string?', 
-            full_sleeve: 'string?',
-            round_sleeve: 'string?', 
-            bust: 'string?', 
-            under_bust: 'string?',
-            waist: 'string?', 
-            hips: 'string?', 
-            half_length: 'string?', 
-            full_length: 'string?',
-            created_at: 'date?',
-            modified_at: 'date?',
-        }
-    }
-      //lets get the measurements from the database
-      Realm.open({
-        schema: [PersonSchema]
-        }).then(realm => {
-        // realm.deleteRealmFile(this);
-        realm.write(() => {
-            //sort in ascending order
-            var persons = realm.objects('Measurement').sorted('fullname', false);
-            this.setState({persons: persons});
-        });
-          this.setState({ realm: realm });
-        }).catch(error => {
-            console.log(error);alert(error);return false;
-        });
-        
+    componentWillMount() {  
     }
     componentDidMount() {
+        this.init();
+    }
+    init = async () => {
+        var PersonSchema =  {
+            name: 'Measurement',
+            primaryKey: 'id',
+            properties: {
+                id: 'int',
+                fullname: 'string', 
+                number: 'string', 
+                gender: 'string',
+                shoulder: 'string?', 
+                chest: 'string?', 
+                arm_hole:'string?',
+                elbow: 'string?', 
+                wrist: 'string?', 
+                full_sleeve: 'string?',
+                round_sleeve: 'string?', 
+                bust: 'string?', 
+                under_bust: 'string?',
+                waist: 'string?', 
+                hips: 'string?', 
+                half_length: 'string?', 
+                full_length: 'string?',
+                created_at: 'date?',
+                modified_at: 'date?',
+            }
+        }
+          //lets get the measurements from the database
+          await Realm.open({
+            schema: [PersonSchema]
+            }).then(realm => {
+            // realm.deleteRealmFile(this);
+            realm.write(() => {
+                //sort in ascending order
+                var persons = realm.objects('Measurement').sorted('fullname', false);
+                this.setState({persons: persons});
+            });
+              this.setState({ realm: realm });
+            }).catch(error => {
+                console.log(error);alert(error);return false;
+            });
     }
     createMeasurement() {
       this.props.navigation.navigate('createMeasurement');
@@ -78,7 +80,6 @@ export default class ListMeasurementScreen extends Component {
         }).then(realm => {
         // realm.deleteRealmFile(this);
         realm.write(() => {
-          console.log('item');
             realm.delete(item);
             alert('Deleted successfully');
         });
@@ -96,15 +97,10 @@ export default class ListMeasurementScreen extends Component {
           {text: 'Yes', onPress: () => this.deleteMeasurement(item)}
         ], {cancelable: false});
     }
-    filteredPersons() {console.log(this.state.persons);
-      var persons = this.state.persons.filter(this.filteredPerson);
+    filteredPersons = async () => {
+      var persons = await this.state.persons.filter(this.filteredPerson);
+      console.log('persons',this.state.persons);
       return persons;
-    }
-    filteredPerson(person) {
-      let lowercasefullname = this.person.fullname.toLowerCase();
-      let lowercasesearch = this.search.toLowerCase();
-
-      return lowercasefullname.indexOf(lowercasesearch) > -1;
     }
     _renderItem = ({item}) => (
       <MyListItem
@@ -115,43 +111,48 @@ export default class ListMeasurementScreen extends Component {
       />
     );
     displayDate(d) {
+        var d = new Date(d);
         var month = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July',
           'August', 'September', 'October', 'November', 'December'];
         return month[d.getMonth()] + ' ' + d.getDate() + ', '+ d.getFullYear();
     }
 
     render() {
-      let persons = this.filteredPersons.bind(this);
+        let lowercasesearch = this.state.search.toLowerCase();
+      let persons = this.state.persons.filter(function(person) {
+        let lowercasefullname = person.fullname.toLowerCase();
+        return lowercasefullname.indexOf(lowercasesearch) > -1; 
+      });
       console.log(persons);
         return (
           <Container>
              <Header>
                 <Body>
-                <Title>{config.name }</Title>
+                <Title style={styles.padder}>{config.name }</Title>
                 </Body>
                 <Right />
             </Header>
             <Content>
-              {/* <Item>
-                  <Input placeholder='Search'  onChangeText={(search) => this.setState({search})} />
+              <Item>
+                  <Input placeholder='Search' onChangeText={(search) => this.setState({search: search})} />
                   <Icon active name='search' />                  
-              </Item> */}
-              <List>
+              </Item>
               <FlatList
-                  data={this.state.persons}
-                  keyExtractor= {(item, index) => item.id}
+                  data={persons}
+                  keyExtractor= {(item, index) => item.id.toString()}
                   renderItem={({item, separators}) => (
 
                     <SwipeRow
                         rightOpenValue={-75}
                         body={
-                          <TouchableHighlight
-                            onShowUnderlay={separators.highlight}
-                            onHideUnderlay={separators.unhighlight}>
-                            <ListItem itemDivider button={true} onPress={() => this.showMeasurement(item)}>
-                                  <Text>{item.fullname} - </Text>
-                                  <Text  style={{fontSize:10}}> {this.displayDate(item.created_at)}</Text>
-                            </ListItem>  
+                          <TouchableHighlight 
+                            onPress={() => this.showMeasurement(item)}
+                            >
+                            <View style={styles.padderText}>
+                                  <View><Text>{item.fullname}  </Text></View>
+                                  <Text  style={{fontSize:10, textAlign: 'right'}}> 
+                                  {this.displayDate(item.created_at)}</Text>
+                            </View>  
                           </TouchableHighlight>
                         }
                         right = {
@@ -162,8 +163,34 @@ export default class ListMeasurementScreen extends Component {
                     />
                   )}
                 />
-                                  
-              </List>
+
+               <FlatList
+                    data={this.state.messages}
+                    KeyExtractor = {(item, index) => item.id}
+                    renderItem={({item, separators}) => (
+                    
+                        <SwipeRow
+                            rightOpenValue={-75}
+                            body={
+                            <TouchableHighlight
+                                onShowUnderlay={separators.highlight}
+                                onHideUnderlay={separators.unhighlight}>
+                                    <View style={{padding: 8}}>
+                                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>{item.sender}  </Text>
+                                        <Text  style={{fontSize:12, textAlign: 'right'}}> 
+                                            {this.displayDate(item.created_at)}</Text>
+                                    </View>
+                            </TouchableHighlight>
+                            }
+                            right = {
+                                <Button danger onPress={() => this.confirmBeforeDelete(item)}>
+                                    <Icon active name="trash" />
+                                </Button>
+                            }
+                        />
+                    )}
+                />
+                    
             </Content>
             <View style={styles.createButtonWrapper}>
                 <TouchableOpacity onPress= {this.createMeasurement.bind(this)}>
@@ -198,5 +225,13 @@ const styles= StyleSheet.create({
       color:'#fff',
       fontSize: 38,
       fontWeight: 'bold',
+    }, 
+    padder: {
+        paddingLeft: 16
+    },
+    padderText: {
+        paddingLeft: 16,
+        flex: 1,
+        flexDirection: 'column'
     }
 });

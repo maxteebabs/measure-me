@@ -128,7 +128,7 @@ export default class EditMeasureMentScreen extends Component {
                 </Body>
                 <Right />
             </Header>
-              <Form>
+              <Form style={styles.padder}>
                 <Item floatingLabel>
                     <Label>Fullname</Label>
                     <Input onChangeText={(fullname) => this.setState({fullname})}
@@ -234,10 +234,15 @@ const styles = StyleSheet.create({
     submitButton: {
         marginTop: 30,
         alignItems: 'center',
-        backgroundColor: '#3B5998'
+        backgroundColor: '#3B5998',
+        marginBottom: 20
     },
     submitButtonText: {
         padding: 20,
         color: '#fff'
+    },
+    padder: {
+        paddingLeft: 8,
+        paddingRight: 8
     }
 });
